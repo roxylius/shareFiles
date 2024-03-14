@@ -6,7 +6,9 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build":"eas build -p android --profile preview",
+    "local": "eas build --platform android --local"
   },
   "dependencies": {
     "@flyerhq/react-native-chat-ui": "^1.4.3",

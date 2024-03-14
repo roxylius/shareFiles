@@ -1,3 +1,3 @@
-const SERVER_URL = "https://absorption-serve-represent-guam.trycloudflare.com";
+const SERVER_URL = "https://shareit-server.azurewebsites.net";
 
 export { SERVER_URL };

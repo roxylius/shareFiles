@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.roxylius.fileShare"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -29,6 +30,14 @@
     "plugins": [
       "expo-router",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "cf6580fd-8c38-4bbb-baf7-9a9bfdc2c756"
+      }
+    }
   }
 }
