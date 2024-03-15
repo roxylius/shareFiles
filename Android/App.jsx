@@ -5,20 +5,22 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NetworkProvider } from 'react-native-offline';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Provider } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 
+//import local components
 import Login from './screens/Login';
 import Signup from './screens/Signup';
-// import Chat from './screens/Chat/Chat';
-// import Home from './screens/Home';
 import Settings from './screens/Settings';
 import Page from './screens/Page';
 import ChatScreen from './screens/components/chatScreen';
+import store from './redux/store';
+
 
 export default function App() {
   //handle if user already logged in
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
     // Check if the user is logged in by reading from AsyncStorage
@@ -36,19 +38,21 @@ export default function App() {
 
 
   return (
-    <NetworkProvider>
-      <NavigationContainer >
-        <SafeAreaProvider >
-            <Stack.Navigator  screenOptions={{ headerShown: false }} >
+    <Provider store={store}>
+      <NetworkProvider>
+        <NavigationContainer >
+          <SafeAreaProvider >
+            <Stack.Navigator screenOptions={{ headerShown: false }} >
               {isLogin ? <Stack.Screen name="home" component={Page} /> : <Stack.Screen name="signup" component={Signup} />}
               {!isLogin ? <Stack.Screen name="home" component={Page} /> : <Stack.Screen name="signup" component={Signup} />}
               <Stack.Screen name="login" component={Login} />
               <Stack.Screen name="settings" component={Settings} />
               <Stack.Screen name="chat" component={ChatScreen} />
             </Stack.Navigator>
-        </SafeAreaProvider>
-      </NavigationContainer>
-    </NetworkProvider>
+          </SafeAreaProvider>
+        </NavigationContainer>
+      </NetworkProvider>
+    </Provider>
   );
 }
 

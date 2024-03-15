@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View, Dimensions, Pressable, BackHandler } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React,{ useEffect, useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
 
 
 //local assets
 import { SERVER_URL } from '../assets/constants';
 import Navbar from './components/navbar';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
 
 
 const Settings = ({ navigation, route }) => {

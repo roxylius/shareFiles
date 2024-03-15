@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Pressable, Alert } from 'react-native';
 import Dialog from "react-native-dialog";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
 
 //local assets
 // // images
@@ -12,11 +13,13 @@ const plus_logo = require('../../assets/images/plus.png');
 
 //constants
 import { SERVER_URL } from '../../assets/constants';
-
+import { actions, reducer } from '../../redux/slice';
 
 
 //recieves navigator from clipboard.js
-const Navbar = ({ navigator, route,AddUser }) => {
+const Navbar = ({ navigator, route, AddUser }) => {
+    const friends = useSelector(state => state.user.friends);
+    const dispatch = useDispatch();
 
     //stores screen name 
     const [screenName, setScreenName] = useState('');
@@ -48,48 +51,39 @@ const Navbar = ({ navigator, route,AddUser }) => {
         setIsDialogVisible(false);
     }
 
-    //to add friend to localstorage
-    async function addFriend(data) {
-        let friendUsernames = JSON.parse(await AsyncStorage.getItem('friendUsernames')) || [];
-    
-        // Add the new username to the array
-        friendUsernames.push(data.name);
-    
-        // Save the updated array back to AsyncStorage
-        await AsyncStorage.setItem('friendUsernames', JSON.stringify(friendUsernames));
-        console.log('Friend added successfully!');
-    }
-
     //to add user to the list
     const handleAddUser = () => {
-        console.log("friend username:",friendUserName);
-        fetch(SERVER_URL+`/api/user/search-user`, {
+        console.log("friend username:", friendUserName);
+        fetch(SERVER_URL + `/api/user/search-user`, {
             method: 'POST',
-            credentials:'include',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name:friendUserName })
+            body: JSON.stringify({ name: friendUserName })
         })
-            .then(response => {
-                // console.log("response",response);
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log('data eixts:' , data.exists);
-                if(data.exists == true){
-                    addFriend(data);
-                    Alert.alert('User added successfully');
-                    addUser();
+                // Check if the user exists
+                if (data.exists == true) {
+                    // Check if the friends array already contains a friend with the same _id
+                    const friendExists = friends.some(friend => friend._id === data._id);
+
+                    if (!friendExists) {
+                        // If the friend does not exist, dispatch the Addfriend action with the received data
+                        dispatch(actions.Addfriend(data));
+                    } else {
+                        Alert.alert('Friend already exists');
+                    }
                 }else{
-                    Alert.alert('User not found');
+                    Alert.alert('User does not exist');
+                
                 }
+
                 setIsDialogVisible(false);
             })
-            .catch(error => {
-                console.log("error", error)
-            });
-    }
+            .catch(error => console.error('Error:', error));
+    };
 
     return (
         <View style={styles.topNav}>
@@ -104,7 +98,7 @@ const Navbar = ({ navigator, route,AddUser }) => {
                 </Pressable>
                 <Dialog.Container visible={isDialogVisible}>
                     <Dialog.Title>Friend UserName: </Dialog.Title>
-                    <Dialog.Input onChangeText={text => setFriendUserName(text)} value={friendUserName}/>
+                    <Dialog.Input onChangeText={text => setFriendUserName(text)} value={friendUserName} />
                     {/* <Dialog.Description>
                         Do you want to delete this account? You cannot undo this action.
                     </Dialog.Description> */}

@@ -2,15 +2,18 @@ import React,{useState} from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-
+import { useSelector, useDispatch } from 'react-redux';
 
 //local components imports
 import Navbar from './components/navbar';
 import ChatContainer from "./components/chatContainer";
+import {actions, reducer} from "../redux/slice";
 
 
 const Page = ({ navigation, route }) => {
     const [userAdded,setuserAdded] = useState(false);
+    // const isUserAdded = useSelector((state) => state.isUserExist.value);
+    
 
     const AddUser = () => {
         setuserAdded(true);
@@ -19,8 +22,8 @@ const Page = ({ navigation, route }) => {
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
-                <Navbar navigator={navigation} route={route} styles={styles.navbar} toAddUser={userAdded} />
-                <ChatContainer AddUser={AddUser}/>
+                <Navbar navigator={navigation} route={route} styles={styles.navbar} />
+                <ChatContainer/>
             </View>
             <StatusBar style="#181818" />
         </SafeAreaView>
