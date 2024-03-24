@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Android",
+    "main": "node_modules/expo/AppEntry.js",
     "slug": "Android",
     "version": "1.0.0",
     "orientation": "portrait",
