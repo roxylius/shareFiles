@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, Text, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux';
 
 //import local assets
 const userIcon = require('../../assets/images/user.png');
-import { actions, reducer } from '../../redux/slice';
+import { actions, reducer } from '../../components/slice';
+import storage from '../../components/storage';
 
 const ChatContainer = ({ toAddUser }) => {
     const [fontLoaded, setFontLoaded] = useState(false);
@@ -52,25 +53,26 @@ const ChatContainer = ({ toAddUser }) => {
     };
 
 
-    // async function loadUsernames() {
-    //     const storedUsernames = await AsyncStorage.getItem('friendUsernames');
-    //     console.log('stored usernames: ', storedUsernames);
-    //     if (storedUsernames) {
-    //         setUsernames(JSON.parse(storedUsernames));
-    //     } else { console.log("no frineds") }
-    // }
+    async function loadUsernames() {
+        const storedUsernames = storage.getString('friends');
+        console.log('stored usernames: ', storedUsernames);
+        if (storedUsernames) {
+            setUsernames(JSON.parse(storedUsernames));
+        } else { console.log("no frineds") }
+    }
 
-    // // ChatContainer.js
-    // useEffect(() => {
-    //     loadUsernames();
-    // }, [toAddUser]);
+    // ChatContainer.js
+    useEffect(() => {
+        loadUsernames();
+    }, [toAddUser]);
+
     console.log('friends: ', friends);
 
 
     return (
         <View style={styles.chatContainer}>
             {friends.map((friend) => (
-                <TouchableOpacity key={friend.userId} style={styles.chatBox} onPress={() => navigation.navigate('chat', { username: friend.name })} >
+                <TouchableOpacity key={friend.userId} style={styles.chatBox} onPress={() => navigation.navigate('chat', { username: friend.name, friendId: friend.userId })} >
                     <Image
                         style={styles.imageStyle}
                         source={userIcon}

@@ -8,7 +8,7 @@ const Input = ({ text, handleText, ifpass }) => {
     const handleFocus = () => setIsFocused(true);
     const handleBlur = () => setIsFocused(false);
 
-    const styleWithFocus = [styles.input, { borderColor: isFocused ? 'white' : '#242424' }];
+    const styleWithFocus = [styles.input, { borderColor: isFocused ? 'white' : '#656562' }];
 
     //if the input is not for password entry
     if (ifpass != true)
@@ -40,11 +40,11 @@ const styles = StyleSheet.create({
         marginTop: '1%',
         paddingVertical: '2.5%',
         paddingHorizontal: '5%',
-        borderColor: "#242424",
+        borderColor: "#b9b9b9",
         color: 'white',
         borderRadius: 10
     },
-    
+
 })
 
 export default Input;

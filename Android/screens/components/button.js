@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ThemedButton } from "react-native-really-awesome-button";
 import { FontAwesome } from '@expo/vector-icons';
 import * as Font from 'expo-font';
@@ -20,14 +20,14 @@ function ButtonThemed({ text, onPress, type, fontFamily }) {
 
 
     if (type == 'serverStatus') {
-        return <ThemedButton name="bruce" type="secondary" style={{fontFamily: fontLoaded?'JetBrainsMonoLight':null}} width={128} height={40} textSize={15} backgroundColor={'#7fffd4'} paddingHorizontal={0} progress onPress={onPress}  >{text}</ThemedButton>
+        return <ThemedButton name="bruce" type="secondary" style={{ fontFamily: fontLoaded ? 'JetBrainsMonoLight' : null }} width={128} height={40} textSize={15} backgroundColor={'#7fffd4'} paddingHorizontal={0} progress onPress={onPress}  >{text}</ThemedButton>
     }
     else if (type == 'localAuth') {
-        return <ThemedButton name="bruce" type="secondary" style={{...styles.button,fontFamily: fontLoaded?'JetBrainsMonoLight':null}} textFontFamily={fontLoaded ? 'JetBrainsMonoLight':null} width={260} textSize={25} progress={true} progressLoadingTime={4000} onPress={onPress} >{text}</ThemedButton>
+        return <ThemedButton name="bruce" type="secondary" style={{ ...styles.button, fontFamily: fontLoaded ? 'JetBrainsMonoLight' : null }} textFontFamily={fontLoaded ? 'JetBrainsMonoLight' : null} width={260} textSize={20} progress={true} progressLoadingTime={4000} onPress={onPress} >{text}</ThemedButton>
     }
-    else if (type == 'google' || type == 'github') {
+    else if (type == 'google' || type == 'github' || type == 'facebook') {
         // console.log(true);
-        return <ThemedButton name="bruce" type="secondary" before={<FontAwesome name={type} size={30} style={styles.icon} />} style={styles.button} width={260} textSize={25} onPress={onPress} >{text}</ThemedButton>
+        return <ThemedButton name="bruce" type="secondary" before={<FontAwesome name={type} size={26} style={styles.icon} />} style={styles.button} width={260} textSize={20} onPress={onPress} >{text}</ThemedButton>
     }
     else {
         // console.log(false)
@@ -38,7 +38,7 @@ function ButtonThemed({ text, onPress, type, fontFamily }) {
 
 const styles = StyleSheet.create({
     button: {
-        marginTop: '8%',
+        marginTop: '3.5%',
         alignSelf: "center",
     },
     icon: {

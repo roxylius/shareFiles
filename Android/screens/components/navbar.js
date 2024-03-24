@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Pressable, Alert } from 'react-native';
 import Dialog from "react-native-dialog";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 
 //local assets
@@ -13,7 +12,8 @@ const plus_logo = require('../../assets/images/plus.png');
 
 //constants
 import { SERVER_URL } from '../../assets/constants';
-import { actions, reducer } from '../../redux/slice';
+import { actions, reducer } from '../../components/slice';
+import storage from '../../components/storage';
 
 
 //recieves navigator from clipboard.js
@@ -67,22 +67,32 @@ const Navbar = ({ navigator, route, AddUser }) => {
                 // Check if the user exists
                 if (data.exists == true) {
                     // Check if the friends array already contains a friend with the same _id
-                    const friendExists = friends.some(friend => friend._id === data._id);
+                    const friendExists = friends.some(friend => friend.userId === data._id);
 
                     if (!friendExists) {
                         // If the friend does not exist, dispatch the Addfriend action with the received data
                         dispatch(actions.Addfriend(data));
+                        const friends = storage.getString('friends');
+                        //store friends in local db mmkv
+                        if (friends) {
+                            const friendsArr = JSON.parse(friends);
+                            friendsArr.push(data);
+                            storage.set('friends', JSON.stringify(friendsArr));
+                        } else {
+                            storage.set('friends', JSON.stringify([data]));
+                        }
                     } else {
                         Alert.alert('Friend already exists');
                     }
-                }else{
+                } else {
                     Alert.alert('User does not exist');
-                
+
                 }
 
                 setIsDialogVisible(false);
             })
             .catch(error => console.error('Error:', error));
+        setFriendUserName('');
     };
 
     return (

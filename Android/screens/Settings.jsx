@@ -1,14 +1,15 @@
 import { StyleSheet, Text, View, Dimensions, Pressable, BackHandler } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React,{ useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
 
 
 //local assets
-import { SERVER_URL } from '../assets/constants';
 import Navbar from './components/navbar';
+import storage from '../components/storage';
+const SERVER_URL = process.env.EXPO_PUBLIC_SERVER_URL;
 
 
 const Settings = ({ navigation, route }) => {
@@ -35,7 +36,7 @@ const Settings = ({ navigation, route }) => {
 
     const [fontLoaded, setFontLoaded] = useState(false);
 
-    const styleWithFont = (style,font)=>{
+    const styleWithFont = (style, font) => {
         return {
             ...style,
             fontFamily: fontLoaded ? font : null
@@ -58,9 +59,8 @@ const Settings = ({ navigation, route }) => {
     useEffect(() => {
         const setUserInfo = async () => {
             console.log("setUserInfo callled");
-            const name = await AsyncStorage.getItem('name');
 
-            if (name === null) {
+            if (storage.getString('user.name') === undefined) {
                 console.log('name null');
                 try {
                     const response = await fetch(userURL, {
@@ -72,9 +72,8 @@ const Settings = ({ navigation, route }) => {
                     console.log(data);
 
                     // stores the user data in local AsyncStorage
-                    await AsyncStorage.setItem("name", data.name);
-                    await AsyncStorage.setItem('email', data.email);
-                    await AsyncStorage.setItem("id", data._id);
+                    storage.set('user.name', data.name);
+                    storage.set('user.email', data.email);
 
                     // set name and email in react hooks
                     setUsername(data.name);
@@ -88,10 +87,11 @@ const Settings = ({ navigation, route }) => {
             }
             else {
                 //set name using local Storage
+                const name = storage.getString('user.name');
                 setUsername(name);
 
                 //set email using local Storage
-                const email = await AsyncStorage.getItem('email');
+                const email = storage.getString('user.email');
                 setEmail(email);
 
                 console.log("else", name, email);
@@ -105,16 +105,10 @@ const Settings = ({ navigation, route }) => {
     //handle Logout
     const handleLogout = async () => {
         console.log("logout clicked");
-        await AsyncStorage.removeItem('name', (err) => {
-            if (!err)
-                console.log("name removed successfully!"); //dev test 
-        });
-        await AsyncStorage.removeItem('email', (err) => {
-            if (!err)
-                console.log("email removed successfully!"); //dev test
-        });
+        storage.delete('user');
 
-        await AsyncStorage.clear();
+        // delete all keys
+        storage.clearAll();
 
         // fetches and get the response from logout 
         const response = await fetch(logoutURL, {
@@ -132,13 +126,14 @@ const Settings = ({ navigation, route }) => {
 
         //sets the message from the reponse in Auth
         setAuth(prevVal => ({ ...prevVal, message: data.message }));
+
+        navigation.navigate('signup');
     };
 
     //handles logout based on response from server
     useEffect(() => {
         if (auth.statusCode == '200') {
             console.log(auth);
-            navigation.navigate('login');
         }
     }, [auth])
 
@@ -155,17 +150,17 @@ const Settings = ({ navigation, route }) => {
             <View style={styles.settings_container}>
                 <Navbar navigator={navigation} route={route} />
                 <View style={styles.item}>
-                    <Text style={styleWithFont(styles.settings_text,'JetBrainsMonoLight')}>Name: {username}</Text>
-                    <Text style={styleWithFont(styles.settings_text,'JetBrainsMonoLight')}>Email: {email}</Text>
+                    <Text style={styleWithFont(styles.settings_text, 'JetBrainsMonoLight')}>Name: {username}</Text>
+                    <Text style={styleWithFont(styles.settings_text, 'JetBrainsMonoLight')}>Email: {email}</Text>
                 </View>
                 <View style={styles.item}>
                     <Pressable onPress={handleLogout}>
-                        <Text style={styleWithFont(styles.settings_heading,'JetBrainsMonoLight')}>Logout</Text>
+                        <Text style={styleWithFont(styles.settings_heading, 'JetBrainsMonoLight')}>Logout</Text>
                     </Pressable>
                 </View>
                 <View style={styles.item}>
                     <Pressable onPress={handleExit}>
-                        <Text style={styleWithFont(styles.settings_heading,'JetBrainsMonoLight')}>Exit</Text>
+                        <Text style={styleWithFont(styles.settings_heading, 'JetBrainsMonoLight')}>Exit</Text>
                     </Pressable>
                 </View>
                 {/* {auth.statusCode == '200' ? null : <Text style={styles.smallTextAlert}>{auth.message}</Text>} */}
@@ -174,7 +169,7 @@ const Settings = ({ navigation, route }) => {
              <Pressable onPress={handleSettings}>
                  <Image source={settings_logo} alt="app logo" style={styles.settings_logo} />
              </Pressable> */}
-            <StatusBar backgroundColor='#181818'/>
+                <StatusBar backgroundColor='#181818' />
             </View >
         </ SafeAreaView>
     );

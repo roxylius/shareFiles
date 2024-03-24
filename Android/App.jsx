@@ -4,8 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NetworkProvider } from 'react-native-offline';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Provider } from 'react-redux';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,19 +14,22 @@ import Signup from './screens/Signup';
 import Settings from './screens/Settings';
 import Page from './screens/Page';
 import ChatScreen from './screens/components/chatScreen';
-import store from './redux/store';
+
+//mmkv
+import storage from './components/storage';
+import linking from './linking';
 
 
 export default function App() {
   //handle if user already logged in
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(storage.getBoolean('isAuth'));
 
   useEffect(() => {
     // Check if the user is logged in by reading from AsyncStorage
     const checkLoginStatus = async () => {
-      const isAuth = await AsyncStorage.getItem("isAuth");
-      console.log(isAuth);
-      if (!isAuth || isAuth === "false") {
+      const isAuth = storage.getBoolean("isAuth");
+
+      if (!isAuth || isAuth === false) {
         setIsLogin(false);
         console.log("Not logged in, redirecting to signup screen");
       }
@@ -38,21 +40,20 @@ export default function App() {
 
 
   return (
-    <Provider store={store}>
-      <NetworkProvider>
-        <NavigationContainer >
-          <SafeAreaProvider >
-            <Stack.Navigator screenOptions={{ headerShown: false }} >
-              {isLogin ? <Stack.Screen name="home" component={Page} /> : <Stack.Screen name="signup" component={Signup} />}
-              {!isLogin ? <Stack.Screen name="home" component={Page} /> : <Stack.Screen name="signup" component={Signup} />}
-              <Stack.Screen name="login" component={Login} />
-              <Stack.Screen name="settings" component={Settings} />
-              <Stack.Screen name="chat" component={ChatScreen} />
-            </Stack.Navigator>
-          </SafeAreaProvider>
-        </NavigationContainer>
-      </NetworkProvider>
-    </Provider>
+    <NetworkProvider>
+      <NavigationContainer linking={linking}>
+        {/* <NavigationContainer> */}
+        <SafeAreaProvider >
+          <Stack.Navigator screenOptions={{ headerShown: false }} >
+            {isLogin ? <Stack.Screen name="home" component={Page} /> : <Stack.Screen name="signup" component={Signup} />}
+            {!isLogin ? <Stack.Screen name="home" component={Page} /> : <Stack.Screen name="signup" component={Signup} />}
+            <Stack.Screen name="login" component={Login} />
+            <Stack.Screen name="settings" component={Settings} />
+            <Stack.Screen name="chat" component={ChatScreen} />
+          </Stack.Navigator>
+        </SafeAreaProvider>
+      </NavigationContainer>
+    </NetworkProvider>
   );
 }
 
