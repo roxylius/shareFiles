@@ -25,7 +25,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://shareit-server.azurewebsites.net"
+        "EXPO_PUBLIC_SERVER_URL": "https://shareit-server.azurewebsites.net"
       }
     }
   }

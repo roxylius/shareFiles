@@ -15,6 +15,7 @@ import Settings from './screens/Settings';
 import Page from './screens/Page';
 import ChatScreen from './screens/components/chatScreen';
 import Test from './screens/components/test';
+import WebViewScreen from './screens/components/webview';
 
 //mmkv
 import storage from './components/storage';
@@ -52,6 +53,7 @@ export default function App() {
             <Stack.Screen name="settings" component={Settings} />
             <Stack.Screen name="chat" component={ChatScreen} />
             <Stack.Screen name="test" component={Test} />
+            <Stack.Screen name="WebView" component={WebViewScreen} />
           </Stack.Navigator>
         </SafeAreaProvider>
       </NavigationContainer>

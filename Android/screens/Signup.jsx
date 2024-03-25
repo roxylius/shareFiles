@@ -6,6 +6,7 @@ import * as Font from 'expo-font';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import storage from '../components/storage.js';
+import { WebView } from 'react-native-webview';
 
 import { useIsConnected } from 'react-native-offline';
 
@@ -19,7 +20,7 @@ import Offline from './components/offline.js';
 const SERVER_URL = process.env.EXPO_PUBLIC_SERVER_URL;
 const GOOGLE_API = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
-WebBrowser.maybeCompleteAuthSession();
+// WebBrowser.maybeCompleteAuthSession();
 
 const Signup = ({ navigation }) => {
 
@@ -104,52 +105,63 @@ const Signup = ({ navigation }) => {
         }
     }, [auth])
 
+    // const handleGoogle = async (release) => {
+    //     setTimeout(release, 10000);
+    //     console.log('Google');
+    //     try {
+    //         const result = await WebBrowser.openBrowserAsync(SERVER_URL + '/api/auth/google');
+    //         console.log(result);
+    //     } catch (error) {
+    //         console.error("GOOGLE: ", error);
+    //     }
+    // };
+
+    // const handleFacebook = async (release) => {
+    //     setTimeout(release, 10000);
+    //     console.log('Facebook');
+    //     console.log('Google');
+    //     try {
+    //         const result = await WebBrowser.openBrowserAsync(SERVER_URL + '/api/auth/facebook');
+    //         console.log(result);
+    //     } catch (error) {
+    //         console.error("FACEBOOK: ", error);
+    //     }
+    // }
     const handleGoogle = async (release) => {
         setTimeout(release, 10000);
         console.log('Google');
-        try {
-            const result = await WebBrowser.openBrowserAsync(SERVER_URL + '/api/auth/google');
-            console.log(result);
-        } catch (error) {
-            console.error("GOOGLE: ", error);
-        }
+        navigation.navigate('WebView', { uri: SERVER_URL + '/api/auth/google' });
     };
 
     const handleFacebook = async (release) => {
         setTimeout(release, 10000);
         console.log('Facebook');
-        console.log('Google');
-        try {
-            const result = await WebBrowser.openBrowserAsync(SERVER_URL + '/api/auth/facebook');
-            console.log(result);
-        } catch (error) {
-            console.error("FACEBOOK: ", error);
-        }
+        navigation.navigate('WebView', { uri: SERVER_URL + '/api/auth/facebook' });
     }
 
-    useEffect(() => {
-        const handleUrl = async (url) => {
-            console.log("handle url: ", url);
-            if (WebBrowser.maybeCompleteAuthSession(url)) {
-                let data = Linking.parse(url.url);
-                console.log("data: ", data);
-                if (data.queryParams.isUser == 'true') {
-                    storage.set('isAuth', true);
-                    storage.set('user.name', data.queryParams.name);
-                    storage.set('user.email', data.queryParams.email);
-                    // setName(data.queryParams.name);
-                    // setEmail(data.queryParams.email);
-                    navigation.navigate('home');
-                }
-                // Handle the deep link data in `data`
-            }
-        };
+    // useEffect(() => {
+    //     const handleUrl = async (url) => {
+    //         console.log("handle url: ", url);
+    //         if (WebBrowser.maybeCompleteAuthSession(url)) {
+    //             let data = Linking.parse(url.url);
+    //             console.log("data: ", data);
+    //             if (data.queryParams.isUser == 'true') {
+    //                 storage.set('isAuth', true);
+    //                 storage.set('user.name', data.queryParams.name);
+    //                 storage.set('user.email', data.queryParams.email);
+    //                 // setName(data.queryParams.name);
+    //                 // setEmail(data.queryParams.email);
+    //                 navigation.navigate('home');
+    //             }
+    //             // Handle the deep link data in `data`
+    //         }
+    //     };
 
-        const Listener = Linking.addEventListener("url", handleUrl);
-        Linking.getInitialURL().then((url) => url && handleUrl(url));
+    //     const Listener = Linking.addEventListener("url", handleUrl);
+    //     Linking.getInitialURL().then((url) => url && handleUrl(url));
 
-        return () => Listener.remove();
-    }, []);
+    //     return () => Listener.remove();
+    // }, []);
 
 
     return (
