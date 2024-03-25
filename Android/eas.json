@@ -21,8 +21,11 @@
       "distribution": "internal"
     },
     "production": {
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.production.com"
+        "EXPO_PUBLIC_API_URL": "https://shareit-server.azurewebsites.net"
       }
     }
   }

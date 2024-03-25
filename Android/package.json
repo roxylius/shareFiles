@@ -6,7 +6,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "build": "eas build -p android --profile preview",
+    "build": "eas build -p android --profile production",
     "local": "eas build --platform android --local",
     "prod": "npx expo start --no-dev --minify"
   },
