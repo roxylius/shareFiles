@@ -1,7 +1,6 @@
 {
   "expo": {
     "name": "Android",
-    "main": "node_modules/expo/AppEntry.js",
     "slug": "Android",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -34,9 +33,6 @@
       },
       "eas": {
         "projectId": "30ce18c6-3beb-420c-b065-0d9c59ba4688"
-      },
-      "cli": {
-        "requireCommit": true
       }
     }
   }

@@ -162,6 +162,7 @@ const Login = ({ navigation }) => {
                 <ButtonThemed text='Google' onPress={handleGoogle} type='google' />
                 <ButtonThemed text='Facebook' onPress={handleFacebook} type='facebook' />
             </View>
+            <Text style={styleWithFont(styles.smallTextlink, "JetBrainsMonoLight")} onPress={() => { navigation.navigate("test") }}>Test</Text>
             {isOnline ? null : <Offline />}
             <StatusBar style="auto" />
         </View>

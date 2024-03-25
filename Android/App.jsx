@@ -14,6 +14,7 @@ import Signup from './screens/Signup';
 import Settings from './screens/Settings';
 import Page from './screens/Page';
 import ChatScreen from './screens/components/chatScreen';
+import Test from './screens/components/test';
 
 //mmkv
 import storage from './components/storage';
@@ -50,6 +51,7 @@ export default function App() {
             <Stack.Screen name="login" component={Login} />
             <Stack.Screen name="settings" component={Settings} />
             <Stack.Screen name="chat" component={ChatScreen} />
+            <Stack.Screen name="test" component={Test} />
           </Stack.Navigator>
         </SafeAreaProvider>
       </NavigationContainer>
