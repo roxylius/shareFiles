@@ -6,7 +6,6 @@ import * as Font from 'expo-font';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import storage from '../components/storage.js';
-import { WebView } from 'react-native-webview';
 
 import { useIsConnected } from 'react-native-offline';
 
@@ -20,7 +19,7 @@ import Offline from './components/offline.js';
 const SERVER_URL = process.env.EXPO_PUBLIC_SERVER_URL;
 const GOOGLE_API = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
-// WebBrowser.maybeCompleteAuthSession();
+WebBrowser.maybeCompleteAuthSession();
 
 const Signup = ({ navigation }) => {
 
@@ -127,17 +126,6 @@ const Signup = ({ navigation }) => {
             console.error("FACEBOOK: ", error);
         }
     }
-    // const handleGoogle = async (release) => {
-    //     setTimeout(release, 10000);
-    //     console.log('Google');
-    //     navigation.navigate('WebView', { uri: SERVER_URL + '/api/auth/google' });
-    // };
-
-    // const handleFacebook = async (release) => {
-    //     setTimeout(release, 10000);
-    //     console.log('Facebook');
-    //     navigation.navigate('WebView', { uri: SERVER_URL + '/api/auth/facebook' });
-    // }
 
     useEffect(() => {
         const handleUrl = async (url) => {

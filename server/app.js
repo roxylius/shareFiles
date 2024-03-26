@@ -14,12 +14,13 @@ const userRouter = require('./views/getUser');
 const googleRouter = require('./views/google');
 const githubRouter = require('./views/github');
 const logoutRouter = require('./views/logout');
-
+const facebookRouter = require('./views/facebook');
+const messageRouter = require('./views/messageHandler');
 
 const app = express();
 
 //set up middleware
-app.use(cors({ origin: ['http://localhost:3001', 'http://localhost:4444', 'exp://192.168.239.205:19000', 'http://localhost:7501','exp://192.168.211.192:8081'], credentials: true, methods: ['GET', 'POST', 'DELETE'] })); //to enable cross origin resourse sharing ie make post,get,etc request form different url
+app.use(cors({ origin: ['http://localhost:3001', 'http://localhost:4444', 'exp://192.168.239.205:19000', 'http://localhost:7501', 'exp://192.168.211.192:8081'], credentials: true, methods: ['GET', 'POST', 'DELETE'] })); //to enable cross origin resourse sharing ie make post,get,etc request form different url
 app.use(bodyParser.urlencoded({ extended: true })); //to read the post request from html form
 app.use(express.json()); //to interpret json
 var store = new MongoDBStore( //setup to store the session in DB
@@ -76,6 +77,8 @@ app.use('/api/user', userRouter);
 app.use('/api/auth/google', googleRouter);
 app.use('/api/auth/github', githubRouter);
 app.use('/api/logout', logoutRouter);
+app.use('/api/auth/facebook', facebookRouter);
+app.use('/api/message', messageRouter);
 
 //testing only 
 app.get('/', (req, res) => {
